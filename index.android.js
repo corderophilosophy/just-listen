@@ -18,7 +18,7 @@ import NativeTachyons from 'react-native-style-tachyons';
 //  Database Deps:
 import * as firebase from 'firebase';
 //  Local imports
-import config from './config/.api';
+import config from './config/.api.js';
 import configureStore from './app/store';
 
 
