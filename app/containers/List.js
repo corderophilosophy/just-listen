@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -11,13 +11,14 @@ import { styles as s } from 'react-native-style-tachyons';
 
 import { ActionCreators } from '../actions';
 
-const List = (props) => (
-  <ListView
-    dataSource={props.dataSource}
-    renderRows={props.renderRows}
-  />
-);
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ActionCreators, dispatch);
+class List extends Component {
+  render() {
+    return (
+      <View>
+        <Text>The List</Text>
+      </View>
+    );
+  }
 }
+
+export default List;

@@ -10,12 +10,13 @@ import {
 import { connect } from 'react-redux';
 
 import { styles as s } from 'react-native-style-tachyons';
+import firebase from 'firebase';
 
 import SignIn from '../components/SignIn';
 import List from '../containers/List';
 import TodoList from '../containers/TodoList';
 
-import { mapDispatchToProps as MDP } from '../utils';
+import { push, pop } from '../actions/NavActions';
 
 const {
   CardStack: NavigationCardStack
@@ -30,10 +31,20 @@ class App extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2
     });
     this.state = {
-      dataSource: ds.cloneWithRows(['row1', 'row2'])
+      dataSource: ds.cloneWithRows(['row1', 'row2']),
+      loggedIn: false
     };
   }
   componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          loggedIn: true
+        });
+      } else {
+        console.log('Not logged in');
+      }
+    });
     BackAndroid.addEventListener('hardwareBackPress', this._handleBackAction);
   }
   componentWillUnmount() {
@@ -46,29 +57,35 @@ class App extends Component {
   }
   _renderScene(props) {
     const { route } = props.scene;
-    if (route.key === 'signin') {
+    if (this.state.loggedIn === false) {
       return (
         <SignIn
           onNavigate={this._handleNavigate.bind(this)}
         />
       );
-    }
-    if (route.key === 'list') {
-      return (
-        <List
-          onNavigate={this._handleNavigate.bind(this)}
-          dataSource={this.state.dataSource}
-          renderRows={(rowData) => this._renderRows(rowData)}
-        />
-      );
-    }
-    if (route.key === 'todolist') {
-      return (
-        <TodoList
+    } else if (this.state.loggedIn === true) {
+      if (route.key === 'signin') {
+        return (
+          <List />
+        );
+      }
+      if (route.key === 'list') {
+        return (
+          <List />
+        );
+      }
+      if (route.key === 'todolist') {
+        return (
+          <TodoList
           onNavigate={this._handleNavigate.bind(this)}
           goBack={this._handleBackAction}
-        />
-      );
+          />
+        );
+      } else {
+        return (
+          <List />
+        );
+      }
     }
   }
   _handleBackAction() {
@@ -91,6 +108,7 @@ class App extends Component {
     }
   }
   render() {
+    console.log(this);
     return (
       <NavigationCardStack
         direction='vertical'
@@ -109,5 +127,8 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  MDP
+  {
+    pushRoute: (route) => push(route),
+    popRoute: () => pop()
+  }
 )(App);

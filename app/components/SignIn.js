@@ -14,6 +14,14 @@ import { mapDispatchToProps as MDP } from '../utils';
 import { ActionCreators } from '../actions';
 import { Button } from './Buttons';
 
+const route = {
+  type: 'push',
+  route: {
+    key: 'list',
+    title:  'List'
+  }
+};
+
 class SignIn extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +64,7 @@ class SignIn extends Component {
     if (!this.state.email || !this.state.validId || !this.state.pass) {
       console.log('Please check your login details.');
     } else {
-      const promise = firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass);
+      const promise = firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass).then(this._logUserIn());
       promise.catch((error) => console.log('Error: ' + error.message));
     }
     //  If User logs in properly, advance to List page.
@@ -65,10 +73,13 @@ class SignIn extends Component {
     if (!this.state.email || !this.state.validId || !this.state.pass) {
       console.log('Please check your sign up details.');
     } else {
-      const promise = firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass);
+      const promise = firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass).then(this._logUserIn());
       promise.catch((error) => console.log('Error: ' + error.message));
     }
     //  If User signs in properly, advance to List page.
+  }
+  _logUserIn() {
+    this.props.onNavigate(route);
   }
   render() {
     return (
