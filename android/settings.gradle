@@ -1,4 +1,4 @@
-rootProject.name = 'justListen_'
+rootProject.name = 'justListen'
 
 include ':app'
 include ':react-native-vector-icons'

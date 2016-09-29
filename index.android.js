@@ -75,4 +75,4 @@ class justListen extends Component {
 }
 
 
-AppRegistry.registerComponent('justListen_', () => justListen);
+AppRegistry.registerComponent('justListen', () => justListen);
