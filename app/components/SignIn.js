@@ -6,12 +6,12 @@ import {
   TextInput,
   Text,
 } from 'react-native';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { styles as s } from 'react-native-style-tachyons';
 import firebase from 'firebase';
 
-import { ActionCreators } from '../Actions';
+import { mapDispatchToProps as MDP } from '../utils';
+import { ActionCreators } from '../actions';
 import { Button } from './Buttons';
 
 class SignIn extends Component {
@@ -21,7 +21,6 @@ class SignIn extends Component {
       user: '',
       pass: '',
       validId: null,
-      count: 0
     };
   }
   _validateEmail(email) {
@@ -54,25 +53,22 @@ class SignIn extends Component {
     }
   }
   _handleLogin() {
-    this.props.addTodo('snakes');
-        // if (!this.state.email || !this.state.validId || !this.state.pass) {
-    //   console.log('Please check your login details.');
-    // } else {
-    //   const promise = firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass);
-    //   promise.catch((error) => console.log('Error: ' + error.message));
-    // }
-    // this.setState({
-    //   count: this.state.count + 1
-    // });
+    if (!this.state.email || !this.state.validId || !this.state.pass) {
+      console.log('Please check your login details.');
+    } else {
+      const promise = firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass);
+      promise.catch((error) => console.log('Error: ' + error.message));
+    }
+    //  If User logs in properly, advance to List page.
   }
-  _handleSignUp(evt) {
-    evt.preventDefault();
+  _handleSignUp() {
     if (!this.state.email || !this.state.validId || !this.state.pass) {
       console.log('Please check your sign up details.');
     } else {
       const promise = firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass);
       promise.catch((error) => console.log('Error: ' + error.message));
     }
+    //  If User signs in properly, advance to List page.
   }
   render() {
     return (
@@ -117,8 +113,4 @@ class SignIn extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ActionCreators, dispatch);
-}
-
-export default connect(() => { return {}; }, mapDispatchToProps)(SignIn);
+export default connect(() => { return {}; }, MDP)(SignIn);

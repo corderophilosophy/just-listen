@@ -10,14 +10,12 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Provider } from 'react-redux';
-import {
-  createStore,
-} from 'redux';
 //  Style Deps:
 import NativeTachyons from 'react-native-style-tachyons';
 //  Database Deps:
 import * as firebase from 'firebase';
 //  Local imports
+import App from './app/components/App';
 import config from './config/.api.js';
 import configureStore from './app/store';
 
@@ -77,4 +75,4 @@ class justListen extends Component {
 }
 
 
-AppRegistry.registerComponent('justListen', () => justListen);
+AppRegistry.registerComponent('justListen_', () => justListen);

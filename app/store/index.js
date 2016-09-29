@@ -15,5 +15,16 @@ export default function configureStore(initialState) {
       loggerMiddleware
     )
   );
-  return createStore(rootReducer, initialState, enhancer);
+  const store = createStore(
+    rootReducer,
+    initialState,
+    enhancer
+  );
+  if (module.hot) {
+    module.hot.accept(() => {
+      const nextRootReducer = require('../reducers/index').default;
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+  return store;
 }
